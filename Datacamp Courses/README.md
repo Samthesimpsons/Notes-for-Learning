@@ -1,1 +1,1 @@
-These are my additional notes to my Goodnotes slides from Datacamp courses.
+Slides and Notes from Datacamp courses.
