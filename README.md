@@ -1,0 +1,1 @@
+Collation of my notes from my online learning. Please enter each folder to see more and their own README.md.
