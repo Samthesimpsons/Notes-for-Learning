@@ -25,9 +25,9 @@ P(\text{ace if draw 5 cards}) = 1 - \frac{{48C5}}{{52C5}} \approx 0.341
 
 Among customers, only 0.1% have an expensive phone plan. A classification model predicts whether a customer will choose this plan.
 
-- $P(\text{Customer expensive phone plan}, A) = 0.1\%
-- $P(\text{Model predicts expensive phone plan}, B \mid \text{customer cheap phone plan}, A') = 10\%
-- $P(\text{Model predicts cheap phone plan}, B' \mid \text{customer expensive phone plan}, A) = 0\%
+- $P(\text{Customer expensive phone plan}, A) = 0.1\%$
+- $P(\text{Model predicts expensive phone plan}, B \mid \text{customer cheap phone plan}, A') = 10\% $
+- $P(\text{Model predicts cheap phone plan}, B' \mid \text{customer expensive phone plan}, A) = 0\% $
 
 Find $P(\text{Customer expensive phone plan}, A \mid \text{Model predicts expensive phone plan}, B)$.
 
