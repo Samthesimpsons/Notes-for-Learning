@@ -25,9 +25,9 @@ P(\text{ace if draw 5 cards}) = 1 - \frac{{48C5}}{{52C5}} \approx 0.341
 
 Among customers, only 0.1% have an expensive phone plan. A classification model predicts whether a customer will choose this plan.
 
-- $P(\text{Customer expensive phone plan}, A) = 0.1\%$
-- $P(\text{Model predicts expensive phone plan}, B \mid \text{customer cheap phone plan}, A') = 10\%$
-- $P(\text{Model predicts cheap phone plan}, B' \mid \text{customer expensive phone plan}, A) = 0\%$
+- $P(\text{Customer expensive phone plan}, A) = 0.1/100$
+- $P(\text{Model predicts expensive phone plan}, B \mid \text{customer cheap phone plan}, A') = 10/100$
+- $P(\text{Model predicts cheap phone plan}, B' \mid \text{customer expensive phone plan}, A) = 0$
 
 Find $P(\text{Customer expensive phone plan}, A \mid \text{Model predicts expensive phone plan}, B)$.
 
@@ -66,8 +66,8 @@ P(A \mid B) = \frac{100\% \cdot 0.1\%}{0.1009} \approx 0.099 \approx 9.9\%
 Historical data shows it rains 5 days per year in a desert region. A meteorologist predicts rain today.
 
 - $P(\text{rain}, A) = \frac{5}{365}$
-- $P(\text{Model predicts rain}, B \mid \text{rain}, A) = 90\%$
-- $P(\text{Model predicts rain}, B \mid \text{no rain}, A') = 10\%$
+- $P(\text{Model predicts rain}, B \mid \text{rain}, A) = 90/100$
+- $P(\text{Model predicts rain}, B \mid \text{no rain}, A') = 10/100$
 
 Find $P(\text{Rain}, A \mid \text{Model predicts rain}, B)$.
 
