@@ -1,6 +1,6 @@
 # Steps in MLOps
 
-Based on my own experience in DBS.
+Based on my own experience.
 
 1. **Project Structuring and Workflow Management**:
    - Organize project structure and dependencies:

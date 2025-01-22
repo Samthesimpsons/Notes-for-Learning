@@ -27,6 +27,12 @@ LAG(t1.column, 1) OVER (ORDER BY t1.id) AS column_next_value,
 -- ROW_NUMBER() uses unique number      e.g. 1 2 3 4
 DENSE_RANK() OVER (PARTITION BY t1.id ORDER BY t1.column1 ASC) AS ranking,
 
+-- Creates percentile ranking of column, and assign which bin it belongs to
+PERCENT_RANK() OVER (PARTITION BY tb1.category ORDER BY tb1.score DESC) AS percentile
+
+-- When doing a function in the context of a window function, then likewise need a window for it
+COUNT(t1.id_1) OVER (PARTITION BY t1.id_2) / MAX(t1.id_1) OVER () * 100 AS ratio
+
 -- Can be placed within agg functions like sum(case when ...)
 CASE
 	WHEN t1.column2 < 3 THEN 1
@@ -46,12 +52,6 @@ CONCAT(
 -- Distinct is optional
 GROUP_CONCAT(DISTINCT tb1.column1 ORDER BY tb1.column1 ASC SEPARATOR ',') AS concat_column1,
 
--- Splits the tb1.score column into 100 bins, and assign which bin it belongs to
-NTILE(100) OVER (PARTITION BYB tb1.category ORDER BY tb1.score DESC) AS percentile
-
--- When doing a function in the context of a window function, then likewise need a window for it
-COUNT(t1.id_1) OVER (PARTITION BY t1.id_2) / MAX(t1.id_1) OVER () * 100 AS ratio
-
 FROM
 your_table1 t1
 -- INNER JOIN/ CROSS JOIN/ LEFT/ RIGHT
@@ -63,7 +63,7 @@ t1.date_key BETWEEN t2.start_date AND t2.end_date
 WHERE
 t1.some_column IS NOT NULL OR
 -- % represents 0>= characters, _ represents 1 strictly
-t1.some_column LIKE '% SAM%' AND 
+t1.some_column LIKE '%SAM%' AND 
 -- Use REGEXP for regex pattern instead
 conditions LIKE 'SAM%'
 GROUP BY
@@ -101,13 +101,14 @@ ON tb1.email = tb2.email AND tb1.id > tb2.id;
 -- Select Second Highest Value with OFFSET
 -- Then to ensure NULL if no value to offset, just wrap in select clause again
 SELECT
-(SELECT DISTINCT column1 
- FROM table1 
- ORDER BY column1 DESC 
- LIMIT 1 OFFSET 1) 
+(
+	SELECT DISTINCT column1 
+	FROM table1 
+	ORDER BY column1 DESC 
+	LIMIT 1 OFFSET 1
+ ) 
 AS secondHighestValue;
 
--- LEARN CTE :)
 
 -- ORDER BY can have aggregation based on the above group by 
 SELECT col1
