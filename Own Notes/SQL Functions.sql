@@ -8,6 +8,7 @@ LENGTH(t1.column) AS num_items,
 -- Returns 1st none null value
 COALESCE(t1.column, 0) AS no_null_column,
 
+-- Can also be used within agg functions like SUM(IF...) to allow conditional agg
 IF(
 	t1.date_column IS NULL,
 	0,
@@ -18,7 +19,11 @@ AS days_difference,
 
 DATE_FORMAT(t1.dates, '%Y-%m') AS month_date,
 
+-- LEAST/ GREATEST
+SELECT LEAST(3, 12, 34, 8, 25);
+
 -- AVG, MIN, MAX aggregation functions
+-- LAG, LEAD
 SUM(t1.column) OVER (ORDER BY t1.id) as cumulative_sum,
 LAG(t1.column, 1) OVER (ORDER BY t1.id) AS column_next_value,
 
@@ -63,14 +68,14 @@ t1.date_key BETWEEN t2.start_date AND t2.end_date
 WHERE
 t1.some_column IS NOT NULL OR
 -- % represents 0>= characters, _ represents 1 strictly
+-- \\b represents letter boundary, e.g. \\bhi\\b represents word hi
 t1.some_column LIKE '%SAM%' AND 
 -- Use REGEXP for regex pattern instead
 conditions LIKE 'SAM%'
 GROUP BY
 column_alias1, t2.column2
 -- WHERE: Can use both non-agg and agg functions inside
--- However if there is an agg function followed by group by
--- Use HAVING instead, which must use an agg function column
+-- However if there is an agg function followed by group by use HAVING instead
 -- However if in select clause we used a window function to agg, then you cannot use that column
 -- in both WHERE and HAVING, must use CTE
 HAVING
