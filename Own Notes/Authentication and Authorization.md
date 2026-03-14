@@ -16,9 +16,7 @@ Example:
 Authorization determines **what resources a user can access and what
 actions they can perform**.
 
-------------------------------------------------------------------------
-
-# 1.1 RBAC --- Role Based Access Control
+## 1.1 RBAC --- Role Based Access Control
 
 Users are assigned **roles**, and roles have **permissions**.
 
@@ -66,9 +64,7 @@ Example role explosion:
     Engineer_EU_ReadOnly
     Engineer_EU_Admin
 
-------------------------------------------------------------------------
-
-# 1.2 ABAC --- Attribute Based Access Control
+## 1.2 ABAC --- Attribute Based Access Control
 
 Instead of roles, decisions are based on **attributes**.
 
@@ -116,9 +112,7 @@ PolicyEngine --> Decision
 Decision --> AllowOrDeny
 ```
 
-------------------------------------------------------------------------
-
-# 1.3 ACL --- Access Control List
+## 1.3 ACL --- Access Control List
 
 Each **resource stores a list of who can access it**.
 
@@ -150,9 +144,7 @@ PermissionCheck --> AllowOrDeny
 
 These methods define **how a user proves their identity**.
 
-------------------------------------------------------------------------
-
-# 2.1 Basic Authentication
+## 2.1 Basic Authentication
 
 Client sends:
 
@@ -178,9 +170,7 @@ Database->>Server: Valid/Invalid
 Server->>Client: Access granted/denied
 ```
 
-------------------------------------------------------------------------
-
-# 2.2 Digest Authentication
+## 2.2 Digest Authentication
 
 Improves security by **sending a hash instead of the password**.
 
@@ -195,9 +185,7 @@ Server->>Server: Verify hash
 Server->>Client: Allow or deny
 ```
 
-------------------------------------------------------------------------
-
-# 2.3 API Keys
+## 2.3 API Keys
 
 Common for **machine-to-machine authentication**.
 
@@ -221,9 +209,7 @@ Database->>Server: Valid/Invalid
 Server->>Client: Response
 ```
 
-------------------------------------------------------------------------
-
-# 2.4 Session Authentication
+## 2.4 Session Authentication
 
 Used in **traditional web applications**.
 
@@ -254,9 +240,7 @@ Instead of sessions, the server returns a **token**.
 
 Client sends the token with each request.
 
-------------------------------------------------------------------------
-
-# 3.1 Bearer Tokens
+## 3.1 Bearer Tokens
 
 Meaning:
 
@@ -278,9 +262,7 @@ API->>API: Validate token
 API->>User: Response
 ```
 
-------------------------------------------------------------------------
-
-# 3.2 JWT --- JSON Web Token
+## 3.2 JWT --- JSON Web Token
 
 JWT is a **self‑contained token**.
 
@@ -310,9 +292,7 @@ API->>API: Verify signature
 API->>User: Response
 ```
 
-------------------------------------------------------------------------
-
-# 3.3 Access & Refresh Tokens
+## 3.3 Access & Refresh Tokens
 
 Used to avoid **long‑lived tokens**.
 
@@ -332,13 +312,9 @@ User->>AuthServer: Refresh Token
 AuthServer->>User: New Access Token
 ```
 
-------------------------------------------------------------------------
-
 # 4. Authentication & Authorization Frameworks
 
-------------------------------------------------------------------------
-
-# 4.1 OAuth2 --- Authorization Framework
+## 4.1 OAuth2 --- Authorization Framework
 
 OAuth2 is an **authorization framework** that allows applications to
 access resources **without sharing user passwords**.
@@ -355,7 +331,7 @@ Common OAuth roles:
   Authorization Server   Issues tokens
   Resource Server        API hosting protected resources
 
-## OAuth2 Authorization Code Flow
+### OAuth2 Authorization Code Flow
 
 ``` mermaid
 sequenceDiagram
@@ -372,9 +348,7 @@ ClientApp->>ResourceServer: API request + token
 ResourceServer->>ClientApp: Data
 ```
 
-------------------------------------------------------------------------
-
-# 4.2 OIDC --- OpenID Connect
+## 4.2 OIDC --- OpenID Connect
 
 OIDC is an **authentication layer built on top of OAuth2**.
 
@@ -395,9 +369,7 @@ Example:
 }
 ```
 
-------------------------------------------------------------------------
-
-# 4.3 SSO --- Single Sign-On
+## 4.3 SSO --- Single Sign-On
 
 Users log in **once** and access multiple applications.
 
@@ -416,7 +388,7 @@ Common providers:
   Google Identity   Social login
   AWS Cognito       Application user pools
 
-## SSO Flow
+### SSO Flow
 
 ``` mermaid
 sequenceDiagram
@@ -432,9 +404,7 @@ ApplicationB->>IdP: Validate
 IdP->>ApplicationB: Valid
 ```
 
-------------------------------------------------------------------------
-
-# 4.4 SAML --- Security Assertion Markup Language
+## 4.4 SAML --- Security Assertion Markup Language
 
 SAML is an **XML-based authentication protocol used for enterprise
 SSO**.
@@ -471,9 +441,7 @@ ServiceProvider->>User: Access granted
   Primary use      Enterprise SSO
   Common systems   Okta, Azure AD, Google Workspace
 
-------------------------------------------------------------------------
-
-# 4.5 Kerberos --- Ticket-Based Authentication Protocol
+## 4.5 Kerberos --- Ticket-Based Authentication Protocol
 
 Kerberos is a **network authentication protocol using tickets and
 symmetric cryptography**.
@@ -493,7 +461,7 @@ Key Components:
 
 KDC = **AS + TGS**
 
-## Kerberos Authentication Flow
+### Kerberos Authentication Flow
 
 ``` mermaid
 sequenceDiagram
@@ -522,9 +490,7 @@ Key Concepts:
 -   Hadoop clusters
 -   Enterprise SSO systems
 
-------------------------------------------------------------------------
-
-# 4.6 LDAP --- Lightweight Directory Access Protocol
+## 4.6 LDAP --- Lightweight Directory Access Protocol
 
 LDAP is a **protocol used to access and manage directory services**.
 
@@ -538,10 +504,9 @@ A directory stores identity information such as:
 
 LDAP often acts as the **central identity database**.
 
-## Directory Structure
+### Directory Structure
 
-LDAP stores data in a hierarchical structure called the **Directory
-Information Tree (DIT)**.
+LDAP stores data in a hierarchical structure called the **Directory Information Tree (DIT)**.
 
 Example:
 
@@ -553,7 +518,7 @@ Example:
      ├── ou=hr
          ├── uid=bob
 
-## LDAP Authentication Flow
+### LDAP Authentication Flow
 
 ``` mermaid
 sequenceDiagram
@@ -564,7 +529,7 @@ LDAPServer->>Application: Valid / Invalid
 Application->>User: Access granted / denied
 ```
 
-## LDAP Operations
+### LDAP Operations
 
   Operation   Description
   ----------- ---------------------------
@@ -588,7 +553,6 @@ Application->>User: Access granted / denied
 | **Session Authentication** | Stateful              | Easy revocation, secure when cookies are protected, simple for web apps               | Requires session store, difficult to scale across distributed systems            | Traditional server-rendered web apps |
 | **Bearer Token**           | Token-based           | Stateless, easy to use in APIs, widely supported                                      | Whoever has token can use it, requires HTTPS, needs expiration management        | REST APIs                            |
 | **JWT**                    | Self-contained token  | Stateless, scalable, contains claims (user info, roles), good for distributed systems | Hard to revoke before expiry, larger token size, potential security pitfalls     | Microservices, modern APIs           |
-
 
 ## Authorization Models
 
