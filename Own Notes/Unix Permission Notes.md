@@ -63,8 +63,6 @@ Allows listing files:
 ls directory/
 ```
 
----
-
 ## Write (w)
 
 Allows modifying the file.
@@ -84,8 +82,6 @@ create files
 delete files
 rename files
 ```
-
----
 
 ## Execute (x)
 
@@ -452,8 +448,6 @@ directory owner → root
 user samuel creates file → owner = samuel
 ```
 
----
-
 ## Group (Default Behavior)
 
 By default new file group = user's primary group. o the directory group is **not inherited automatically**.
@@ -465,8 +459,6 @@ user group = staff
 directory group = developers
 new file group → staff
 ```
-
----
 
 # 12. Enforcing Group Inheritance (using setgid)
 
