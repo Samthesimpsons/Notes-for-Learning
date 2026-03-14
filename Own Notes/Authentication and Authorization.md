@@ -376,6 +376,16 @@ Returns an **ID Token (JWT)**.
 
 Users log in once and access multiple applications.
 
+An Identity Provider (IdP) is a system responsible for authenticating users and issuing identity information or tokens to applications. Applications trust the IdP instead of implementing authentication themselves.
+
+| Provider        | Example Use                   |
+| --------------- | ----------------------------- |
+| Okta            | Enterprise SSO                |
+| Auth0           | Authentication platform       |
+| Azure AD        | Corporate identity management |
+| Google Identity | Social login                  |
+| AWS Cognito     | Application user pools        |
+
 ### SSO Flow
 
 ```mermaid
@@ -416,25 +426,33 @@ App->>User: Logged in
 
 ------------------------------------------------------------------------
 
-# Quick Interview Summary
+# Quick Interview Summary with Strength and Limitations
 
-### Authentication Methods
+## Authentication Models
 
-    Basic
-    Digest
-    API Key
-    Session
-    Bearer Token
-    JWT
+| Method                     | Type                  | Strengths                                                                             | Limitations                                                                      | Typical Use Case                     |
+| -------------------------- | --------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------ |
+| **Basic Auth**             | Credential-based      | Very simple to implement, supported by HTTP standard                                  | Sends credentials every request, requires HTTPS, difficult to revoke credentials | Internal tools, simple APIs          |
+| **Digest Auth**            | Challenge-response    | Password not sent directly, slightly more secure than Basic                           | Complex, limited adoption, largely replaced by token-based auth                  | Legacy systems                       |
+| **API Keys**               | Token-like credential | Simple for machine-to-machine auth, easy to implement                                 | Hard to rotate, no built-in identity metadata, can be leaked easily              | Public APIs (Stripe, Google Maps)    |
+| **Session Authentication** | Stateful              | Easy revocation, secure when cookies are protected, simple for web apps               | Requires session store, difficult to scale across distributed systems            | Traditional server-rendered web apps |
+| **Bearer Token**           | Token-based           | Stateless, easy to use in APIs, widely supported                                      | Whoever has token can use it, requires HTTPS, needs expiration management        | REST APIs                            |
+| **JWT**                    | Self-contained token  | Stateless, scalable, contains claims (user info, roles), good for distributed systems | Hard to revoke before expiry, larger token size, potential security pitfalls     | Microservices, modern APIs           |
 
-### Authorization Models
 
-    RBAC
-    ABAC
-    ACL
+## Authorization Models
 
-### Protocols
+| Model                                     | Core Idea                                               | Strengths                                    | Limitations                                                | Example Systems                                |
+| ----------------------------------------- | ------------------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------- |
+| **RBAC** (Role-Based Access Control)      | Permissions assigned to roles, users assigned to roles  | Simple mental model, easy to implement       | Role explosion in large organizations, limited flexibility | GitHub roles, Kubernetes RBAC                  |
+| **ABAC** (Attribute-Based Access Control) | Access determined by evaluating attributes and policies | Highly flexible, powerful policy enforcement | Complex policies, harder to debug and maintain             | AWS IAM policies, Google Cloud IAM             |
+| **ACL** (Access Control List)             | Resource stores list of users and permissions           | Fine-grained control per resource            | Hard to manage at scale, large permission lists            | Google Drive sharing, Windows file permissions |
 
-    OAuth2 → authorization
-    OIDC → authentication layer on OAuth2
-    SSO → login once across apps
+
+## Protocols
+
+| Protocol                  | Purpose                                                                             | Strengths                                               | Limitations                                 | Common Use Cases                |
+| ------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------- | ------------------------------- |
+| **OAuth2**                | Authorization framework allowing apps to access resources without sharing passwords | Secure delegated access, widely adopted, flexible flows | Complex to implement correctly              | Login with Google, GitHub OAuth |
+| **OIDC (OpenID Connect)** | Authentication layer on top of OAuth2                                               | Standardized identity authentication, returns ID tokens | Requires OAuth2 infrastructure              | Social login, enterprise login  |
+| **SSO (Single Sign-On)**  | Allows one login across multiple applications                                       | Improved user experience, centralized authentication    | Depends on identity provider infrastructure | Corporate login systems         |
