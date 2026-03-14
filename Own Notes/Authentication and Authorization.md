@@ -340,11 +340,24 @@ AuthServer->>User: New Access Token
 
 # OAuth2 --- Authorization Framework
 
-Allows applications to access resources **without sharing passwords**.
+OAuth2 is an **authorization framework** that allows applications to
+access resources **without sharing user passwords**.
 
-### OAuth2 Authorization Code Flow
+Instead of giving credentials to third-party applications, users grant
+**limited access via tokens**.
 
-```mermaid
+Common OAuth roles:
+
+  Role                   Description
+  ---------------------- ---------------------------------
+  Resource Owner         The user who owns the data
+  Client                 Application requesting access
+  Authorization Server   Issues tokens
+  Resource Server        API hosting protected resources
+
+## OAuth2 Authorization Code Flow
+
+``` mermaid
 sequenceDiagram
 User->>ClientApp: Login with Google
 ClientApp->>AuthServer: Redirect user
@@ -363,32 +376,49 @@ ResourceServer->>ClientApp: Data
 
 # OIDC --- OpenID Connect
 
-OIDC adds **authentication** on top of OAuth2.
+OIDC is an **authentication layer built on top of OAuth2**.
 
 OAuth2 → Authorization\
 OIDC → Authentication
 
-Returns an **ID Token (JWT)**.
+OIDC returns an **ID Token (JWT)** containing user identity.
+
+Example:
+
+``` json
+{
+  "sub": "123456",
+  "name": "Samuel Sim",
+  "email": "samuel@example.com",
+  "iss": "https://accounts.google.com",
+  "exp": 1712345678
+}
+```
 
 ------------------------------------------------------------------------
 
 # SSO --- Single Sign-On
 
-Users log in once and access multiple applications.
+Users log in **once** and access multiple applications.
 
-An Identity Provider (IdP) is a system responsible for authenticating users and issuing identity information or tokens to applications. Applications trust the IdP instead of implementing authentication themselves.
+An **Identity Provider (IdP)** authenticates users and issues tokens or
+assertions trusted by applications.
 
-| Provider        | Example Use                   |
-| --------------- | ----------------------------- |
-| Okta            | Enterprise SSO                |
-| Auth0           | Authentication platform       |
-| Azure AD        | Corporate identity management |
-| Google Identity | Social login                  |
-| AWS Cognito     | Application user pools        |
+Applications rely on the IdP instead of implementing authentication.
 
-### SSO Flow
+Common providers:
 
-```mermaid
+  Provider          Example Use
+  ----------------- -------------------------------
+  Okta              Enterprise SSO
+  Auth0             Authentication platform
+  Azure AD          Corporate identity management
+  Google Identity   Social login
+  AWS Cognito       Application user pools
+
+## SSO Flow
+
+``` mermaid
 sequenceDiagram
 User->>IdP: Login
 IdP->>User: Authenticated
@@ -404,9 +434,149 @@ IdP->>ApplicationB: Valid
 
 ------------------------------------------------------------------------
 
+# SAML --- Security Assertion Markup Language
+
+SAML is an **XML-based authentication protocol used for enterprise
+SSO**.
+
+It allows applications to **delegate authentication to an Identity
+Provider**.
+
+### Core Components
+
+  Component                 Description
+  ------------------------- ---------------------------------------
+  Identity Provider (IdP)   Authenticates the user
+  Service Provider (SP)     Application requesting authentication
+  SAML Assertion            XML document proving authentication
+
+### SAML Authentication Flow
+
+``` mermaid
+sequenceDiagram
+User->>ServiceProvider: Request login
+ServiceProvider->>IdentityProvider: Redirect user
+
+User->>IdentityProvider: Authenticate
+IdentityProvider->>ServiceProvider: SAML Assertion
+
+ServiceProvider->>User: Access granted
+```
+
+### Characteristics
+
+  Feature          Description
+  ---------------- ----------------------------------
+  Format           XML
+  Primary use      Enterprise SSO
+  Common systems   Okta, Azure AD, Google Workspace
+
+------------------------------------------------------------------------
+
+# Kerberos --- Ticket-Based Authentication Protocol
+
+Kerberos is a **network authentication protocol using tickets and
+symmetric cryptography**.
+
+Instead of repeatedly sending passwords across the network, Kerberos
+issues **time-limited authentication tickets**.
+
+### Key Components
+
+  Component        Description
+  ---------------- ----------------------------
+  Client           User requesting access
+  KDC              Key Distribution Center
+  AS               Authentication Server
+  TGS              Ticket Granting Server
+  Service Server   Application being accessed
+
+KDC = **AS + TGS**
+
+## Kerberos Authentication Flow
+
+``` mermaid
+sequenceDiagram
+Client->>AS: Authentication request
+AS->>Client: Ticket Granting Ticket (TGT)
+
+Client->>TGS: Request service ticket
+TGS->>Client: Service Ticket
+
+Client->>Service: Request with ticket
+Service->>Client: Access granted
+```
+
+### Key Concepts
+
+  Concept         Explanation
+  --------------- ------------------------------
+  Ticket          Proof of authentication
+  Session Key     Temporary encryption key
+  Authenticator   Prevents replay attacks
+  Time Sync       Requires synchronized clocks
+
+### Typical Usage
+
+-   Microsoft Active Directory
+-   Hadoop clusters
+-   Enterprise SSO systems
+
+------------------------------------------------------------------------
+
+# LDAP --- Lightweight Directory Access Protocol
+
+LDAP is a **protocol used to access and manage directory services**.
+
+A directory stores identity information such as:
+
+-   users
+-   groups
+-   roles
+-   permissions
+-   devices
+
+LDAP often acts as the **central identity database**.
+
+## Directory Structure
+
+LDAP stores data in a hierarchical structure called the **Directory
+Information Tree (DIT)**.
+
+Example:
+
+    dc=company,dc=com
+     ├── ou=engineering
+     │   ├── uid=samuel
+     │   ├── uid=alice
+     │
+     ├── ou=hr
+         ├── uid=bob
+
+## LDAP Authentication Flow
+
+``` mermaid
+sequenceDiagram
+User->>Application: Login
+Application->>LDAPServer: Bind request
+LDAPServer->>LDAPServer: Validate credentials
+LDAPServer->>Application: Valid / Invalid
+Application->>User: Access granted / denied
+```
+
+## LDAP Operations
+
+  Operation   Description
+  ----------- ---------------------------
+  Bind        Authenticate to directory
+  Search      Query directory entries
+  Add         Create new entry
+  Modify      Update entry
+  Delete      Remove entry
+
 # Real System Example --- GitHub OAuth Login
 
-```mermaid
+``` mermaid
 sequenceDiagram
 User->>App: Login with GitHub
 App->>GitHubOAuth: Redirect
@@ -448,11 +618,14 @@ App->>User: Logged in
 | **ABAC** (Attribute-Based Access Control) | Access determined by evaluating attributes and policies | Highly flexible, powerful policy enforcement | Complex policies, harder to debug and maintain             | AWS IAM policies, Google Cloud IAM             |
 | **ACL** (Access Control List)             | Resource stores list of users and permissions           | Fine-grained control per resource            | Hard to manage at scale, large permission lists            | Google Drive sharing, Windows file permissions |
 
-
 ## Protocols
 
-| Protocol                  | Purpose                                                                             | Strengths                                               | Limitations                                 | Common Use Cases                |
-| ------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------- | ------------------------------- |
-| **OAuth2**                | Authorization framework allowing apps to access resources without sharing passwords | Secure delegated access, widely adopted, flexible flows | Complex to implement correctly              | Login with Google, GitHub OAuth |
-| **OIDC (OpenID Connect)** | Authentication layer on top of OAuth2                                               | Standardized identity authentication, returns ID tokens | Requires OAuth2 infrastructure              | Social login, enterprise login  |
-| **SSO (Single Sign-On)**  | Allows one login across multiple applications                                       | Improved user experience, centralized authentication    | Depends on identity provider infrastructure | Corporate login systems         |
+| Protocol / System                                | Purpose                                                                                                                  | Strengths                                                                                     | Limitations                                                                                          | Common Use Cases                                                     |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **OAuth2**                                       | Authorization framework allowing apps to access resources without sharing passwords                                      | Secure delegated access, widely adopted, flexible flows                                       | Complex to implement correctly; not authentication by itself                                         | Login with Google, GitHub OAuth, API access delegation               |
+| **OIDC (OpenID Connect)**                        | Authentication layer built on top of OAuth2 that provides identity verification                                          | Standardized authentication, returns ID tokens (JWT), modern web/mobile friendly              | Requires OAuth2 infrastructure; slightly more complex setup                                          | Social login, enterprise identity providers, modern SaaS apps        |
+| **SSO (Single Sign-On)**                         | Allows users to authenticate once and access multiple applications                                                       | Improved user experience, centralized authentication management                               | Depends on identity provider infrastructure; single point of failure if poorly designed              | Corporate login systems, enterprise portals                          |
+| **Kerberos**                                     | Network authentication protocol using tickets and symmetric-key cryptography                                             | Strong mutual authentication, password not sent over network, efficient for internal networks | Complex setup, tightly coupled with domain infrastructure, weaker for internet-facing apps           | Windows Active Directory authentication, internal enterprise systems |
+| **SAML (Security Assertion Markup Language)**    | XML-based protocol for exchanging authentication and authorization data between identity providers and service providers | Mature enterprise standard, strong federation support, widely used by enterprises             | XML-heavy, complex to configure/debug, not ideal for mobile or modern APIs                           | Enterprise SSO (Okta, Azure AD, ADFS), SaaS integrations             |
+| **LDAP (Lightweight Directory Access Protocol)** | Protocol for accessing and maintaining distributed directory services (users, groups, credentials)                       | Centralized directory, efficient querying, widely supported by enterprise systems             | Not an authentication protocol by itself; requires additional mechanisms (e.g., bind authentication) | Corporate directories, Active Directory, user management systems     |
+
