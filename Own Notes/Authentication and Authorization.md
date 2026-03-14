@@ -338,7 +338,7 @@ AuthServer->>User: New Access Token
 
 ------------------------------------------------------------------------
 
-# OAuth2 --- Authorization Framework
+# 4.1 OAuth2 --- Authorization Framework
 
 OAuth2 is an **authorization framework** that allows applications to
 access resources **without sharing user passwords**.
@@ -374,7 +374,7 @@ ResourceServer->>ClientApp: Data
 
 ------------------------------------------------------------------------
 
-# OIDC --- OpenID Connect
+# 4.2 OIDC --- OpenID Connect
 
 OIDC is an **authentication layer built on top of OAuth2**.
 
@@ -397,7 +397,7 @@ Example:
 
 ------------------------------------------------------------------------
 
-# SSO --- Single Sign-On
+# 4.3 SSO --- Single Sign-On
 
 Users log in **once** and access multiple applications.
 
@@ -434,7 +434,7 @@ IdP->>ApplicationB: Valid
 
 ------------------------------------------------------------------------
 
-# SAML --- Security Assertion Markup Language
+# 4.4 SAML --- Security Assertion Markup Language
 
 SAML is an **XML-based authentication protocol used for enterprise
 SSO**.
@@ -442,7 +442,7 @@ SSO**.
 It allows applications to **delegate authentication to an Identity
 Provider**.
 
-### Core Components
+Core Components:
 
   Component                 Description
   ------------------------- ---------------------------------------
@@ -473,7 +473,7 @@ ServiceProvider->>User: Access granted
 
 ------------------------------------------------------------------------
 
-# Kerberos --- Ticket-Based Authentication Protocol
+# 4.5 Kerberos --- Ticket-Based Authentication Protocol
 
 Kerberos is a **network authentication protocol using tickets and
 symmetric cryptography**.
@@ -481,7 +481,7 @@ symmetric cryptography**.
 Instead of repeatedly sending passwords across the network, Kerberos
 issues **time-limited authentication tickets**.
 
-### Key Components
+Key Components:
 
   Component        Description
   ---------------- ----------------------------
@@ -507,7 +507,7 @@ Client->>Service: Request with ticket
 Service->>Client: Access granted
 ```
 
-### Key Concepts
+Key Concepts:
 
   Concept         Explanation
   --------------- ------------------------------
@@ -524,7 +524,7 @@ Service->>Client: Access granted
 
 ------------------------------------------------------------------------
 
-# LDAP --- Lightweight Directory Access Protocol
+# 4.6 LDAP --- Lightweight Directory Access Protocol
 
 LDAP is a **protocol used to access and manage directory services**.
 
@@ -573,26 +573,6 @@ Application->>User: Access granted / denied
   Add         Create new entry
   Modify      Update entry
   Delete      Remove entry
-
-# Real System Example --- GitHub OAuth Login
-
-``` mermaid
-sequenceDiagram
-User->>App: Login with GitHub
-App->>GitHubOAuth: Redirect
-
-User->>GitHubOAuth: Authenticate
-GitHubOAuth->>App: Authorization Code
-
-App->>GitHubOAuth: Exchange Code
-GitHubOAuth->>App: Access Token
-
-App->>GitHubAPI: Request user info
-GitHubAPI->>App: User profile
-
-App->>App: Create session or JWT
-App->>User: Logged in
-```
 
 ------------------------------------------------------------------------
 
