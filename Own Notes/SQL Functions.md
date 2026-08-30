@@ -27,10 +27,25 @@ SELECT
     DATE_FORMAT(t1.dates, '%Y-%m') AS month_date,
 ```
 
-## LEAST / GREATEST
+## LEAST / GREATEST vs MIN / MAX
+
+* `LEAST` / `GREATEST` → **scalar** functions: compare values **across columns within a single row**.
+* `MIN` / `MAX` → **aggregate** functions: compare values **down a single column across rows** (or per group with `GROUP BY`).
+* `LEAST` / `GREATEST` return `NULL` if **any** argument is `NULL` (wrap with `COALESCE`); `MIN` / `MAX` simply ignore `NULL` rows.
 
 ```sql
-SELECT LEAST(3, 12, 34, 8, 25);
+SELECT LEAST(3, 12, 34, 8, 25);                            -- returns 3 (row-wise)
+
+SELECT
+    LEAST(t1.price_a, t1.price_b, t1.price_c) AS cheapest, -- per row, across columns
+    GREATEST(t1.start_date, t2.start_date) AS overlap_start
+FROM your_table1 t1
+JOIN your_table2 t2 ON t1.id = t2.id;
+
+SELECT
+    MIN(t1.price_a) AS lowest_price,                       -- per column, across rows
+    MAX(t1.price_a) AS highest_price
+FROM your_table1 t1;
 ```
 
 ---
