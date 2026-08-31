@@ -4,6 +4,8 @@
 
 ## Basic Aggregation and Cleaning
 
+* `COUNT(column)` already **ignores `NULL` rows** when counting (like other aggregates, e.g. `MIN` / `MAX` / `AVG`); use `COUNT(*)` to count all rows including `NULL`s.
+
 ```sql
 SELECT
     COUNT(DISTINCT t1.column) AS row_count,
