@@ -27,6 +27,21 @@ SELECT
     DATE_FORMAT(t1.dates, '%Y-%m') AS month_date,
 ```
 
+## DATEDIFF vs TIMEDIFF
+
+* `DATEDIFF(expr1, expr2)` → returns the number of **days** between two dates (ignores the time part).
+* `TIMEDIFF(expr1, expr2)` → returns the difference as a **TIME value** (`HH:MM:SS`); both arguments must be the same type (TIME or DATETIME).
+* Result is `expr1 - expr2`, so put the later value first for a positive result.
+
+```sql
+SELECT TIMEDIFF('2026-08-31 10:30:00', '2026-08-31 08:15:00');  -- returns '02:15:00'
+
+SELECT
+    TIMEDIFF(t1.end_time, t1.start_time) AS duration,
+    TIME_TO_SEC(TIMEDIFF(t1.end_time, t1.start_time)) AS duration_seconds
+FROM your_table1 t1;
+```
+
 ## LEAST / GREATEST vs MIN / MAX
 
 * `LEAST` / `GREATEST` → **scalar** functions: compare values **across columns within a single row**.
