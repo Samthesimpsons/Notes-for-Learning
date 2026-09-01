@@ -249,7 +249,11 @@ LIMIT 1;
 
 ## Additional Notes
 
-✅ Use **`SUM(IF(...))`** for conditional aggregation.
-✅ Use **window functions** for partitioned rolling calculations.
-✅ For advanced ETL, combine **CTEs** with **window functions** for clarity.
-✅ Use **`REGEXP`** for regex-based filtering for advanced pattern matching.
+* Use **`SUM(IF(...))`** for conditional aggregation.
+* Use **window functions** for partitioned rolling calculations.
+* For advanced ETL, combine **CTEs** with **window functions** for clarity.
+* Use **`REGEXP`** for regex-based filtering for advanced pattern matching.
+* Memorise: `CASE WHEN ... THEN ... ELSE ... END`.
+* Memorise: with `GROUP BY`, `HAVING` can only filter on columns specified in the `GROUP BY` or on aggregates (e.g. `COUNT(...)`).
+* Memorise: window function columns can only be filtered with `WHERE` in an outer query/CTE — never directly in the same query's `WHERE`/`HAVING`.
+* Memorise: window syntax is `agg_function(value if needed) OVER (PARTITION BY ... if needed ORDER BY ... if needed) AS column_name`.
