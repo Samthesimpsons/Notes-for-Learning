@@ -86,6 +86,23 @@ FROM your_table1 t1;
 
 ---
 
+## Consecutive Rows Trick (Gaps and Islands)
+
+* To count **consecutive** dates: subtract `ROW_NUMBER()` from the date — consecutive rows share the **same `subtracted_date`**, so it acts as a group key for each streak.
+* Then `GROUP BY` the subtracted date and `COUNT(*)` to get each streak's length.
+
+```sql
+SELECT
+    user_id,
+    record_date - (ROW_NUMBER() OVER (PARTITION BY user_id, account_id ORDER BY record_date)) AS subtracted_date
+FROM
+    sf_events
+-- MySQL: date arithmetic needs INTERVAL →
+-- DATE_SUB(record_date, INTERVAL ROW_NUMBER() OVER (...) DAY)
+```
+
+---
+
 ## Conditional Columns (CASE)
 
 ```sql
